@@ -1,468 +1,985 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facultative Placement Platform - POC</title>
+    <title>Reinsurance Reimagined: The Digital Marketplace Opportunity</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Zen -->
-    <!-- Application Structure Plan: This POC is a task-oriented Single Page Application (SPA) designed for a reinsurance broker. The primary view is a "Dashboard" listing active placements. From here, the user can navigate to two other views: a "New Placement Form" and a "Placement Detail" view, which acts as the data room. This structure was chosen to directly mirror a broker's workflow: review portfolio, create new deal, manage deal. Navigation is handled by JavaScript, which shows/hides the relevant view containers, creating a seamless experience without page reloads. This design directly tests the core hypotheses of the 'Phase 1' strategy by simulating the proposed digital workflow. -->
-    <!-- Visualization & Content Choices: The dashboard uses a clean table layout to present placements. The core visualization is in the "Placement Detail" view: a Chart.js Doughnut chart serves as a "Syndication Tracker," visually representing the percentage of the risk that has been quoted. This provides immediate, at-a-glance insight into placement progress, a key value proposition. Quotes are presented in a structured HTML table, and Q&A is handled in a simple, threaded-comment style layout. All data is mocked within JavaScript objects to simulate a live environment and demonstrate the platform's functionality without a backend. -->
+    <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative journey. It starts with a high-level introduction (The "What"), moves to visualizing the core problem (The "Why it's broken"), introduces the actors (The "Who"), presents the proposed platform (The "How to fix it"), analyzes its potential (The "Will it work?"), and concludes with a strategic roadmap (The "Path Forward"). This thematic, storytelling structure was chosen over a direct report-to-page mapping to make the complex information more engaging and intuitive for a user who might be an investor, innovator, or industry professional, guiding them logically from problem to solution to evaluation. A functional POC for Phase 1 is now embedded within a modal, accessible from the roadmap, to provide a tangible, interactive demonstration of the proposed solution. -->
+    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to make the dense report digestible. An interactive HTML/CSS process flow diagram visualizes the "Problem" section, making friction tangible. "The Players" are presented in a clear, comparative card layout. The "Solution" uses interactive cards and a dynamic "Before/After" table (powered by JS) to highlight the value proposition. The "Analysis" section transforms text into a dashboard with Chart.js visualizations (bar, donut) and animated counters to make feasibility, viability, and desirability data easy to grasp. The roadmap is a clean, visual timeline, now with an interactive button to launch the POC. The POC itself uses a task-based UI with a dashboard, forms, and a detail view with its own syndication tracker chart (Chart.js), all running on a mock JS data store. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #F8F9FA;
+            color: #212529;
         }
-        .view { display: none; }
-        .view.active { display: block; }
+        .section-title {
+            @apply text-3xl md:text-4xl font-bold text-gray-800 mb-2 text-center;
+        }
+        .section-subtitle {
+            @apply text-lg text-gray-500 mb-12 text-center max-w-3xl mx-auto;
+        }
+        .card {
+            @apply bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300;
+        }
+        .nav-link {
+            @apply px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-300;
+        }
+        .tab-button {
+            @apply px-6 py-2 text-lg font-semibold rounded-t-lg transition-colors duration-300;
+        }
+        .tab-button.active {
+            @apply bg-white text-indigo-600;
+        }
+        .tab-button:not(.active) {
+            @apply bg-gray-200 text-gray-600 hover:bg-gray-300;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .modal {
+            @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 transition-opacity duration-300 opacity-0 pointer-events-none;
+        }
+        .modal.visible {
+            @apply opacity-100 pointer-events-auto;
+        }
+        .modal-content {
+            @apply bg-white rounded-lg shadow-2xl p-8 max-w-2xl w-full transform scale-95 transition-transform duration-300;
+        }
+        .modal.visible .modal-content {
+            @apply scale-100;
+        }
+
+        /* POC Specific Styles */
+        .poc-view { display: none; }
+        .poc-view.active { display: block; }
         .input-field { @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500; }
         .btn { @apply font-semibold py-2 px-4 rounded-md transition-colors duration-200; }
         .btn-primary { @apply bg-indigo-600 text-white hover:bg-indigo-700; }
         .btn-secondary { @apply bg-gray-200 text-gray-800 hover:bg-gray-300; }
-        .card { @apply bg-white rounded-lg shadow; }
-        .tab { @apply px-4 py-2 font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 cursor-pointer; }
-        .tab.active { @apply text-indigo-600 border-indigo-500; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .poc-tab { @apply px-4 py-2 font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 cursor-pointer; }
+        .poc-tab.active { @apply text-indigo-600 border-indigo-500; }
+        .poc-tab-content { display: none; }
+        .poc-tab-content.active { display: block; }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="antialiased">
 
-    <div id="app-container" class="min-h-screen">
-        <header class="bg-white shadow-sm sticky top-0 z-30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center space-x-4">
-                        <span class="text-2xl">🏢</span>
-                        <h1 class="text-xl font-bold text-gray-800">Facultative Placement Platform <span class="text-sm font-normal text-indigo-600">POC</span></h1>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span class="text-gray-500">Broker: Alex Carter</span>
-                        <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center font-bold text-indigo-700">AC</div>
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-800">Reinsurance Reimagined</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#problem" class="nav-link">The Problem</a>
+                        <a href="#solution" class="nav-link">The Solution</a>
+                        <a href="#analysis" class="nav-link">The Opportunity</a>
+                        <a href="#roadmap" class="nav-link">The Path Forward</a>
                     </div>
                 </div>
             </div>
-        </header>
+        </nav>
+    </header>
 
-        <main class="p-4 sm:p-6 lg:p-8">
-            <!-- Dashboard View -->
-            <div id="dashboard-view" class="view active">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">My Placements</h2>
-                    <button id="btn-new-placement" class="btn btn-primary">Create New Placement</button>
-                </div>
-                <div class="card overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th class="p-4 font-semibold">Placement Name</th>
-                                <th class="p-4 font-semibold">Cedent</th>
-                                <th class="p-4 font-semibold">Limit Required</th>
-                                <th class="p-4 font-semibold">Status</th>
-                                <th class="p-4 font-semibold"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="placements-table-body">
-                            <!-- JS will populate this -->
-                        </tbody>
-                    </table>
+    <main>
+        <section id="hero" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto text-center px-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+                    Digitizing a Trillion-Dollar Industry
+                </h1>
+                <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-600">
+                    The global reinsurance market is the financial bedrock of the insurance world, yet it operates on processes stuck in the past. This is an exploration of the massive opportunity to bring it into the digital age.
+                </p>
+                <div class="mt-10">
+                    <a href="#problem" class="bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                        Discover the Opportunity
+                    </a>
                 </div>
             </div>
+        </section>
 
-            <!-- New Placement View -->
-            <div id="new-placement-view" class="view">
-                 <h2 class="text-2xl font-bold mb-6">Create New Facultative Placement</h2>
-                 <div class="card p-6">
-                    <div class="space-y-6">
-                        <div>
-                            <h3 class="font-semibold text-lg">1. Basic Details</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Placement Name</label>
-                                    <input type="text" class="input-field" placeholder="e.g., Downtown Office Tower">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ceding Company</label>
-                                    <select class="input-field">
-                                        <option>Regional Mutual Insurance</option>
-                                        <option>National Property Insurers</option>
-                                    </select>
-                                </div>
+        <section id="problem" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">The Friction in the Flow</h2>
+                <p class="section-subtitle">
+                    The traditional reinsurance placement process is a complex, manual, and often chaotic journey. It's a system burdened by inefficiency, creating significant pain points for everyone involved. Click on each step to see the hidden frictions.
+                </p>
+                
+                <div class="w-full overflow-x-auto pb-8">
+                    <div class="flex items-center space-x-4 md:space-x-0 min-w-[900px] md:min-w-full md:grid md:grid-cols-10">
+                        <div class="col-span-2 process-step" data-modal="modal-submission">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">📄</div>
+                                <h3 class="font-bold">Submission Prep</h3>
+                                <p class="text-sm text-gray-500">The Starting Point</p>
                             </div>
                         </div>
-                        <div>
-                            <h3 class="font-semibold text-lg">2. Risk & Coverage</h3>
-                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Line of Business</label>
-                                    <input type="text" class="input-field" value="Facultative Property" disabled>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Total Insured Value (USD)</label>
-                                    <input type="number" class="input-field" placeholder="100000000">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Limit Required (USD)</label>
-                                    <input type="number" class="input-field" placeholder="25000000">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Cedent Retention (USD)</label>
-                                    <input type="number" class="input-field" placeholder="5000000">
-                                </div>
+                        <div class="col-span-1 flex justify-center"><div class="text-3xl text-gray-300 font-light">→</div></div>
+                        <div class="col-span-2 process-step" data-modal="modal-broker">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">🤝</div>
+                                <h3 class="font-bold">Broker Marketing</h3>
+                                <p class="text-sm text-gray-500">Finding a Home for Risk</p>
                             </div>
                         </div>
-                         <div class="flex justify-end space-x-4">
-                            <button id="btn-cancel-new" class="btn btn-secondary">Cancel</button>
-                            <button class="btn btn-primary">Save & View Placement</button>
+                        <div class="col-span-1 flex justify-center"><div class="text-3xl text-gray-300 font-light">→</div></div>
+                        <div class="col-span-2 process-step" data-modal="modal-underwriting">
+                             <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">🔍</div>
+                                <h3 class="font-bold">Underwriting</h3>
+                                <p class="text-sm text-gray-500">Pricing the Risk</p>
+                            </div>
+                        </div>
+                         <div class="col-span-1 flex justify-center"><div class="text-3xl text-gray-300 font-light">→</div></div>
+                        <div class="col-span-1 process-step" data-modal="modal-finalizing">
+                             <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">✍️</div>
+                                <h3 class="font-bold">Finalizing</h3>
+                                <p class="text-sm text-gray-500">Closing the Deal</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="players" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">The Key Protagonists</h2>
+                <p class="section-subtitle">Three key players dominate the reinsurance landscape, each with their own unique motivations, goals, and frustrations with the current system.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">🏢</div>
+                        <h3 class="text-2xl font-bold mb-2">The Ceding Insurer</h3>
+                        <p class="text-gray-600 mb-4">The buyer of protection. Seeks to manage capital, stabilize earnings, and protect against catastrophes.</p>
+                        <div class="text-left space-y-2">
+                           <p><span class="font-semibold text-green-600">Wants:</span> Best price, broad coverage, fast placement.</p>
+                           <p><span class="font-semibold text-red-600">Pains:</span> Opaque pricing, slow process, limited market access.</p>
+                        </div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">📈</div>
+                        <h3 class="text-2xl font-bold mb-2">The Reinsurer</h3>
+                        <p class="text-gray-600 mb-4">The seller of protection. Aims for underwriting profit by building a diversified portfolio of risks.</p>
+                        <div class="text-left space-y-2">
+                           <p><span class="font-semibold text-green-600">Wants:</span> High-quality data, adequate premium, disciplined partners.</p>
+                           <p><span class="font-semibold text-red-600">Pains:</span> Poor data, flawed analytics, outdated portfolio views.</p>
+                        </div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">💼</div>
+                        <h3 class="text-2xl font-bold mb-2">The Broker</h3>
+                        <p class="text-gray-600 mb-4">The critical intermediary. Advises the cedent and navigates the market to place the risk.</p>
+                        <div class="text-left space-y-2">
+                           <p><span class="font-semibold text-green-600">Wants:</span> Client satisfaction, efficient placement, market influence.</p>
+                           <p><span class="font-semibold text-red-600">Pains:</span> Manual admin work, communication chaos, process bottlenecks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">The Marketplace Solution</h2>
+                <p class="section-subtitle">
+                    A digital marketplace can replace the manual, opaque process with a transparent, data-driven, and streamlined experience. It addresses the core pain points of every participant by re-engineering the placement process.
+                </p>
+                 <div class="flex justify-center mb-8">
+                    <button id="btn-traditional" class="tab-button active">Traditional Process</button>
+                    <button id="btn-digital" class="tab-button">Digital Marketplace</button>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="p-4 font-semibold text-gray-700">Stage</th>
+                                    <th class="p-4 font-semibold text-gray-700">Experience</th>
+                                </tr>
+                            </thead>
+                            <tbody id="process-comparison-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">Analyzing the Opportunity</h2>
+                <p class="section-subtitle">A great idea must be feasible, viable, and desirable. The data suggests a compelling case for a reinsurance marketplace, despite the challenges.</p>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Feasibility: Can It Be Built?</h3>
+                        <p class="text-gray-600 mb-6">Building the platform is technically complex but achievable with modern technology. The greatest hurdles are not in code, but in navigating operational and regulatory complexities.</p>
+                        <div class="chart-container h-64 max-h-72">
+                            <canvas id="feasibilityChart"></canvas>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Viability: Can It Be Profitable?</h3>
+                        <p class="text-gray-600 mb-6">The market is massive. Capturing even a tiny fraction of the value flowing through the system represents a multi-billion dollar opportunity.</p>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div id="market-size" class="text-4xl font-bold text-indigo-600">0</div>
+                                <div class="text-gray-500">Trillion USD P&C Market</div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div id="reinsurance-premium" class="text-4xl font-bold text-indigo-600">0</div>
+                                <div class="text-gray-500">Billion+ in Global Reinsurance Premium</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2">
+                         <div class="grid lg:grid-cols-2 gap-12 items-center mt-12">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Desirability: Will They Use It?</h3>
+                                <p class="text-gray-600 mb-6">The desire for change is driven by acute pain points. The platform is desirable because it offers clear, quantifiable benefits to every participant by solving their most pressing problems.</p>
+                                <div class="space-y-2">
+                                    <p>✅ <span class="font-semibold">For Reinsurers:</span> Better data for better decisions.</p>
+                                    <p>✅ <span class="font-semibold">For Cedents:</span> Better pricing and market access.</p>
+                                    <p>✅ <span class="font-semibold">For Brokers:</span> Less admin, more strategic advising.</p>
+                                </div>
+                            </div>
+                            <div class="chart-container h-80 max-h-96">
+                                <canvas id="desirabilityChart"></canvas>
+                            </div>
                          </div>
                     </div>
-                 </div>
-            </div>
-
-            <!-- Placement Detail View -->
-            <div id="placement-detail-view" class="view">
-                <div class="mb-6">
-                    <button id="btn-back-to-dashboard" class="text-indigo-600 hover:underline font-medium">&larr; Back to Dashboard</button>
-                    <h2 id="detail-placement-name" class="text-3xl font-bold mt-2"></h2>
-                    <p id="detail-placement-cedent" class="text-gray-500"></p>
                 </div>
+            </div>
+        </section>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2">
-                        <div class="card">
-                            <div class="border-b border-gray-200">
-                                <nav id="detail-tabs" class="flex -mb-px px-6">
-                                    <a class="tab active" data-tab="quotes">Quotes</a>
-                                    <a class="tab" data-tab="qa">Q&A</a>
-                                    <a class="tab" data-tab="details">Details</a>
-                                </nav>
+        <section id="roadmap" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">The Path Forward</h2>
+                <p class="section-subtitle">Success requires a deliberate, phased approach to manage complexity, build trust, and gain market momentum. A "big bang" launch is doomed to fail.</p>
+                <div class="relative">
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 -translate-y-1/2"></div>
+                    <div class="grid md:grid-cols-3 gap-8 relative">
+                        <div class="card text-center">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                            <h3 class="text-xl font-bold mb-2">Phase 1: The Wedge</h3>
+                            <p class="text-gray-600">Launch a POC/MVP focused on the more transactional <span class="font-semibold">facultative market</span> in a single geography. Target brokers as the primary users to prove value and build initial liquidity.</p>
+                            <div class="mt-4">
+                                <button id="launch-poc-btn" class="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                                    Launch Interactive POC
+                                </button>
                             </div>
-                            <div class="p-6">
-                                <div id="tab-content-quotes" class="tab-content active">
-                                    <table class="w-full text-left">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="p-3 font-semibold">Reinsurer</th>
-                                                <th class="p-3 font-semibold">Line Offered (%)</th>
-                                                <th class="p-3 font-semibold">Premium (USD)</th>
-                                                <th class="p-3 font-semibold">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="quotes-body"></tbody>
-                                    </table>
-                                </div>
-                                <div id="tab-content-qa" class="tab-content">
-                                    <div class="space-y-4">
-                                        <div id="qa-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
-                                            <!-- Q&A items will be injected here -->
+                        </div>
+                        <div class="card text-center">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                            <h3 class="text-xl font-bold mb-2">Phase 2: Expansion</h3>
+                            <p class="text-gray-600">Expand into adjacent business lines and geographies. Add more sophisticated analytics and begin marketing directly to ceding companies. Leverage the network effect to accelerate growth.</p>
+                        </div>
+                        <div class="card text-center">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                            <h3 class="text-xl font-bold mb-2">Phase 3: The Holy Grail</h3>
+                             <p class="text-gray-600">With a mature platform and trusted brand, begin tackling the highly complex and relationship-driven <span class="font-semibold">treaty market</span>. Evolve into the core infrastructure for the entire industry.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p>&copy; 2025 Reinsurance Reimagined. An interactive analysis.</p>
+            <p class="text-sm text-gray-400 mt-2">This is a conceptual application based on the provided source report.</p>
+        </div>
+    </footer>
+    
+    <!-- Modals for Process Steps -->
+    <div id="modal-submission" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Pain Point: Submission Prep</h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li><span class="font-semibold">Unstructured Data:</span> Risk data is buried in PDFs, Word docs, and messy spreadsheets.</li>
+                <li><span class="font-semibold">Manual Entry:</span> High risk of human error, typos, and missing information from the start.</li>
+                <li><span class="font-semibold">No Standards:</span> Every submission is different, making it impossible for reinsurers to automate data ingestion.</li>
+                 <li><span class="font-semibold">Time Consuming:</span> Broker teams spend countless hours manually compiling and cleaning data.</li>
+            </ul>
+            <button class="modal-close-btn mt-6 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+    <div id="modal-broker" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Pain Point: Broker Marketing</h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                 <li><span class="font-semibold">Email Chaos:</span> The entire process runs on massive email chains with dozens of recipients and attachments.</li>
+                <li><span class="font-semibold">Manual Tracking:</span> Brokers use spreadsheets to manually track quotes, questions, and declinations. It's slow and error-prone.</li>
+                <li><span class="font-semibold">Limited Reach:</span> Market access is often limited by the broker's personal network, potentially missing better capacity.</li>
+                 <li><span class="font-semibold">No Transparency:</span> The cedent has little to no real-time visibility into the placement's progress.</li>
+            </ul>
+             <button class="modal-close-btn mt-6 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+    <div id="modal-underwriting" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Pain Point: Underwriting & Analysis</h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li><span class="font-semibold">Data Re-keying:</span> Underwriters manually type data from the submission into their own pricing models, wasting time and risking errors.</li>
+                <li><span class="font-semibold">Analytic Bottlenecks:</span> Poor data quality cripples sophisticated pricing tools, forcing reliance on slow, manual analysis.</li>
+                <li><span class="font-semibold">Outdated Portfolio Views:</span> Underwriters make decisions based on portfolio data that can be weeks old, leading to suboptimal risk selection.</li>
+                <li><span class="font-semibold">Repetitive Questions:</span> Multiple reinsurers ask the same clarifying questions independently, creating communication overhead.</li>
+            </ul>
+             <button class="modal-close-btn mt-6 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+    <div id="modal-finalizing" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Pain Point: Finalizing the Deal</h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li><span class="font-semibold">Manual Documentation:</span> Reinsurance slips and full contract wordings are created manually, a meticulous but slow process.</li>
+                <li><span class="font-semibold">Version Control Issues:</span> Managing changes and ensuring all parties agree on the final terms can be difficult.</li>
+                <li><span class="font-semibold">Compliance Burden:</span> Ensuring every contract meets complex, multi-jurisdictional regulations is a significant challenge.</li>
+                <li><span class="font-semibold">Inefficient Payments:</span> Premium and claims settlements often rely on antiquated processes, increasing back-office costs.</li>
+            </ul>
+             <button class="modal-close-btn mt-6 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <!-- POC Modal -->
+    <div id="poc-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 lg:p-8 z-50 transition-all duration-300 opacity-0 pointer-events-none scale-105">
+        <div id="poc-modal-content" class="bg-gray-100 rounded-xl shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col transform transition-all duration-300 scale-95">
+            <div class="flex-shrink-0 p-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-xl">
+                 <div class="flex items-center space-x-4">
+                    <span class="text-2xl">🏢</span>
+                    <h1 class="text-xl font-bold text-gray-800">Facultative Placement Platform <span class="text-sm font-normal text-indigo-600">POC</span></h1>
+                </div>
+                <button id="close-poc-btn" class="text-gray-500 hover:text-gray-800 text-3xl font-light">&times;</button>
+            </div>
+            <div class="flex-grow overflow-y-auto">
+                <div class="p-4 sm:p-6 lg:p-8">
+                    <!-- Dashboard View -->
+                    <div id="dashboard-view" class="poc-view active">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">Broker Placements</h2>
+                            <button id="btn-new-placement" class="btn btn-primary">Create New Placement</button>
+                        </div>
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Placement Name</th>
+                                        <th class="p-4 font-semibold">Cedent</th>
+                                        <th class="p-4 font-semibold">Limit Required</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="placements-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- New Placement View -->
+                    <div id="new-placement-view" class="poc-view">
+                         <h2 class="text-2xl font-bold mb-6">Create New Facultative Placement</h2>
+                         <div class="bg-white rounded-lg shadow p-6">
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="font-semibold text-lg">1. Basic Details</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Placement Name</label>
+                                            <input type="text" class="input-field" placeholder="e.g., Downtown Office Tower">
                                         </div>
-                                        <div class="mt-4">
-                                            <textarea class="input-field" rows="3" placeholder="Ask a question to all participating reinsurers..."></textarea>
-                                            <button class="btn btn-primary mt-2">Post Question</button>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Ceding Company</label>
+                                            <select class="input-field">
+                                                <option>Regional Mutual Insurance</option>
+                                                <option>National Property Insurers</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="tab-content-details" class="tab-content">
-                                    <div id="risk-details-content" class="space-y-4"></div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">2. Risk & Coverage</h3>
+                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Line of Business</label>
+                                            <input type="text" class="input-field" value="Facultative Property" disabled>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Total Insured Value (USD)</label>
+                                            <input type="number" class="input-field" placeholder="100000000">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Limit Required (USD)</label>
+                                            <input type="number" class="input-field" placeholder="25000000">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Cedent Retention (USD)</label>
+                                            <input type="number" class="input-field" placeholder="5000000">
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="flex justify-end space-x-4">
+                                    <button id="btn-cancel-new" class="btn btn-secondary">Cancel</button>
+                                    <button class="btn btn-primary">Save & View Placement</button>
+                                 </div>
+                            </div>
+                         </div>
+                    </div>
+
+                    <!-- Placement Detail View -->
+                    <div id="placement-detail-view" class="poc-view">
+                        <div class="mb-6">
+                            <button id="btn-back-to-dashboard" class="text-indigo-600 hover:underline font-medium">&larr; Back to Dashboard</button>
+                            <h2 id="detail-placement-name" class="text-3xl font-bold mt-2"></h2>
+                            <p id="detail-placement-cedent" class="text-gray-500"></p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2">
+                                <div class="bg-white rounded-lg shadow">
+                                    <div class="border-b border-gray-200">
+                                        <nav id="detail-tabs" class="flex -mb-px px-6">
+                                            <a class="poc-tab active" data-tab="quotes">Quotes</a>
+                                            <a class="poc-tab" data-tab="qa">Q&A</a>
+                                            <a class="poc-tab" data-tab="details">Details</a>
+                                        </nav>
+                                    </div>
+                                    <div class="p-6">
+                                        <div id="tab-content-quotes" class="poc-tab-content active">
+                                            <table class="w-full text-left">
+                                                <thead class="bg-gray-50">
+                                                    <tr>
+                                                        <th class="p-3 font-semibold">Reinsurer</th>
+                                                        <th class="p-3 font-semibold">Line Offered (%)</th>
+                                                        <th class="p-3 font-semibold">Premium (USD)</th>
+                                                        <th class="p-3 font-semibold">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="quotes-body"></tbody>
+                                            </table>
+                                        </div>
+                                        <div id="tab-content-qa" class="poc-tab-content">
+                                            <div class="space-y-4">
+                                                <div id="qa-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                                                </div>
+                                                <div class="mt-4">
+                                                    <textarea class="input-field" rows="3" placeholder="Ask a question to all participating reinsurers..."></textarea>
+                                                    <button class="btn btn-primary mt-2">Post Question</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tab-content-details" class="poc-tab-content">
+                                            <div id="risk-details-content" class="space-y-4"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="card p-6">
-                            <h3 class="font-bold text-lg mb-4">Syndication Progress</h3>
-                            <div class="relative w-full h-64">
-                                <canvas id="syndication-chart"></canvas>
-                            </div>
-                            <div class="mt-4 text-center">
-                                <p class="text-gray-600">Limit Required: <span id="limit-required" class="font-bold"></span></p>
-                                <p class="text-gray-600">Total Quoted: <span id="total-quoted" class="font-bold text-green-600"></span></p>
-                            </div>
-                        </div>
-                        <div class="card p-6">
-                            <h3 class="font-bold text-lg mb-4">Participating Reinsurers</h3>
-                            <div id="reinsurers-list" class="space-y-2"></div>
-                             <div class="mt-4">
-                                <h4 class="font-semibold mb-2">Simulate Quote</h4>
-                                <select id="quote-sim-reinsurer" class="input-field mb-2"></select>
-                                <input id="quote-sim-line" type="number" class="input-field mb-2" placeholder="Line Offered (%)">
-                                <button id="btn-simulate-quote" class="btn btn-secondary w-full">Submit Quote</button>
+                            <div class="space-y-6">
+                                <div class="bg-white rounded-lg shadow p-6">
+                                    <h3 class="font-bold text-lg mb-4">Syndication Progress</h3>
+                                    <div class="relative w-full h-64">
+                                        <canvas id="syndication-chart"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <p class="text-gray-600">Limit Required: <span id="limit-required" class="font-bold"></span></p>
+                                        <p class="text-gray-600">Total Quoted: <span id="total-quoted" class="font-bold text-green-600"></span></p>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg shadow p-6">
+                                    <h3 class="font-bold text-lg mb-4">Participating Reinsurers</h3>
+                                    <div id="reinsurers-list" class="space-y-2"></div>
+                                     <div class="mt-4">
+                                        <h4 class="font-semibold mb-2">Simulate Quote</h4>
+                                        <select id="quote-sim-reinsurer" class="input-field mb-2"></select>
+                                        <input id="quote-sim-line" type="number" class="input-field mb-2" placeholder="Line Offered (%)">
+                                        <button id="btn-simulate-quote" class="btn btn-secondary w-full">Submit Quote</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- DATA STORE (Mock Backend) ---
-        const appData = {
-            reinsurers: [
-                { id: 1, name: 'Global Re' },
-                { id: 2, name: 'Capital Solutions' },
-                { id: 3, name: 'Apex Reinsurance' },
-                { id: 4, name: 'Synergy Risk Partners' },
-                { id: 5, name: 'Bermuda Mutual Re' },
-            ],
-            placements: [
-                {
-                    id: 1,
-                    name: 'Downtown Office Tower',
-                    cedent: 'Regional Mutual Insurance',
-                    limitRequired: 25000000,
-                    retention: 5000000,
-                    tiv: 100000000,
-                    status: 'In Progress',
-                    participants: [1, 2, 3, 4, 5],
-                    quotes: [
-                        { reinsurerId: 1, line: 20, premium: 120000, status: 'Quoted' },
-                        { reinsurerId: 2, line: 25, premium: 125000, status: 'Quoted' },
-                        { reinsurerId: 4, line: 0, premium: 0, status: 'Declined' },
-                    ],
-                    qa: [
-                        { from: 'Broker', text: 'Can you confirm the fire protection class for the location?' },
-                        { from: 'Global Re', text: 'Our engineering team is reviewing. Stand by.' }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'Manufacturing Plant Portfolio',
-                    cedent: 'National Property Insurers',
-                    limitRequired: 50000000,
-                    retention: 10000000,
-                    tiv: 350000000,
-                    status: 'In Progress',
-                    participants: [1, 3, 5],
-                    quotes: [],
-                    qa: []
-                },
-                {
-                    id: 3,
-                    name: 'Coastal Hotel Chain',
-                    cedent: 'Regional Mutual Insurance',
-                    limitRequired: 15000000,
-                    retention: 2500000,
-                    tiv: 75000000,
-                    status: 'Bound',
-                    participants: [2, 4, 5],
-                    quotes: [
-                         { reinsurerId: 2, line: 50, premium: 250000, status: 'Bound' },
-                         { reinsurerId: 5, line: 50, premium: 260000, status: 'Bound' },
-                    ],
-                    qa: []
-                }
-            ],
-            currentPlacementId: null,
-        };
-
-        // --- UI ELEMENTS ---
-        const views = {
-            dashboard: document.getElementById('dashboard-view'),
-            newPlacement: document.getElementById('new-placement-view'),
-            placementDetail: document.getElementById('placement-detail-view'),
-        };
-        const placementsTableBody = document.getElementById('placements-table-body');
-        const btnNewPlacement = document.getElementById('btn-new-placement');
-        const btnCancelNew = document.getElementById('btn-cancel-new');
-        const btnBackToDashboard = document.getElementById('btn-back-to-dashboard');
-        
-        // Detail View Elements
-        const detailPlacementName = document.getElementById('detail-placement-name');
-        const detailPlacementCedent = document.getElementById('detail-placement-cedent');
-        const quotesBody = document.getElementById('quotes-body');
-        const reinsurersList = document.getElementById('reinsurers-list');
-        const detailTabs = document.getElementById('detail-tabs');
-        const limitRequiredEl = document.getElementById('limit-required');
-        const totalQuotedEl = document.getElementById('total-quoted');
-        const riskDetailsContent = document.getElementById('risk-details-content');
-        const qaList = document.getElementById('qa-list');
-        const quoteSimReinsurerSelect = document.getElementById('quote-sim-reinsurer');
-        const quoteSimLineInput = document.getElementById('quote-sim-line');
-        const btnSimulateQuote = document.getElementById('btn-simulate-quote');
-        
-        let syndicationChart = null;
-
-        // --- RENDER FUNCTIONS ---
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
-        }
-        
-        function showView(viewName) {
-            Object.values(views).forEach(view => view.classList.remove('active'));
-            views[viewName].classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        function renderDashboard() {
-            placementsTableBody.innerHTML = '';
-            appData.placements.forEach(p => {
-                const totalQuotedLine = p.quotes.filter(q => q.status.includes('Quoted') || q.status.includes('Bound')).reduce((sum, q) => sum + q.line, 0);
-                const statusColor = p.status === 'Bound' ? 'bg-green-100 text-green-800' : (totalQuotedLine >= 100 ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800');
-                const finalStatus = p.status === 'Bound' ? 'Bound' : (totalQuotedLine >= 100 ? 'Fully Quoted' : 'In Progress');
-
-                const row = `
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                        <td class="p-4 font-medium">${p.name}</td>
-                        <td class="p-4 text-gray-600">${p.cedent}</td>
-                        <td class="p-4 text-gray-600">${formatCurrency(p.limitRequired)}</td>
-                        <td class="p-4"><span class="px-2 py-1 text-xs font-medium rounded-full ${statusColor}">${finalStatus}</span></td>
-                        <td class="p-4 text-right"><button class="btn-view-placement text-indigo-600 hover:underline" data-id="${p.id}">View</button></td>
-                    </tr>
-                `;
-                placementsTableBody.innerHTML += row;
-            });
-            document.querySelectorAll('.btn-view-placement').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.target.dataset.id);
-                    renderPlacementDetail(id);
-                });
-            });
-        }
-
-        function renderPlacementDetail(placementId) {
-            appData.currentPlacementId = placementId;
-            const p = appData.placements.find(p => p.id === placementId);
-            if (!p) return;
-
-            detailPlacementName.textContent = p.name;
-            detailPlacementCedent.textContent = p.cedent;
+        document.addEventListener('DOMContentLoaded', function () {
             
-            // Render Quotes
-            quotesBody.innerHTML = '';
-            p.quotes.forEach(q => {
-                const reinsurer = appData.reinsurers.find(r => r.id === q.reinsurerId);
-                const statusColor = q.status === 'Bound' ? 'text-green-600' : (q.status === 'Quoted' ? 'text-blue-600' : 'text-red-600');
-                const row = `
+            // --- MAIN PAGE SCRIPT ---
+
+            const processComparisonData = {
+                traditional: [
+                    { stage: 'Submission Prep', experience: 'Manual data extraction; unstructured PDFs/Excel; high risk of error.' },
+                    { stage: 'Market Discovery', experience: 'Relies on personal contacts; limited reach; missed opportunities.' },
+                    { stage: 'Negotiation & Q&A', experience: 'Disjointed email/phone chains; no central audit trail; repetitive questions.' },
+                    { stage: 'Quoting & Analysis', experience: 'Quotes in disparate formats; manual, time-consuming comparison.' },
+                    { stage: 'Underwriting Analysis', experience: 'Slow, manual data transfer to external modeling systems; major bottlenecks.' },
+                    { stage: 'Binding & Documentation', experience: 'Manual creation of slips and contracts; version control issues.' },
+                ],
+                digital: [
+                    { stage: 'Submission Prep', experience: 'Standardized, dynamic templates; automated data ingestion via API; real-time validation.' },
+                    { stage: 'Market Discovery', experience: 'Algorithmic matching of risk to appetite; broader, unbiased market access.' },
+                    { stage: 'Negotiation & Q&A', experience: 'Centralized, secure, and auditable communication hub; enhanced transparency.' },
+                    { stage: 'Quoting & Analysis', experience: 'Standardized quote submission; automated "apples-to-apples" comparison dashboard.' },
+                    { stage: 'Underwriting Analysis', experience: 'Embedded analytics; model risk directly on the platform; near real-time results.' },
+                    { stage: 'Binding & Documentation', experience: 'Automated generation of standardized slips; collaborative contract finalization.' },
+                ]
+            };
+            
+            const traditionalBtn = document.getElementById('btn-traditional');
+            const digitalBtn = document.getElementById('btn-digital');
+            const comparisonBody = document.getElementById('process-comparison-body');
+
+            function renderComparisonTable(type) {
+                const data = processComparisonData[type];
+                comparisonBody.innerHTML = data.map(row => `
                     <tr class="border-b border-gray-200">
-                        <td class="p-3 font-medium">${reinsurer.name}</td>
-                        <td class="p-3">${q.line > 0 ? q.line + '%' : '-'}</td>
-                        <td class="p-3">${q.premium > 0 ? formatCurrency(q.premium) : '-'}</td>
-                        <td class="p-3 font-semibold ${statusColor}">${q.status}</td>
+                        <td class="p-4 font-medium text-gray-800">${row.stage}</td>
+                        <td class="p-4 text-gray-600">${row.experience}</td>
                     </tr>
-                `;
-                quotesBody.innerHTML += row;
-            });
-            if (p.quotes.length === 0) {
-                quotesBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">No quotes submitted yet.</td></tr>`;
+                `).join('');
             }
 
-            // Render Participants
-            reinsurersList.innerHTML = '';
-            p.participants.forEach(id => {
-                const reinsurer = appData.reinsurers.find(r => r.id === id);
-                reinsurersList.innerHTML += `<div class="flex justify-between items-center text-sm p-2 bg-gray-50 rounded-md"><span>${reinsurer.name}</span><span class="text-green-500">✔ Invited</span></div>`;
-            });
-            
-            // Render Risk Details
-            riskDetailsContent.innerHTML = `
-                <p><strong>Total Insured Value (TIV):</strong> ${formatCurrency(p.tiv)}</p>
-                <p><strong>Cedent Retention:</strong> ${formatCurrency(p.retention)}</p>
-                <p><strong>Limit Required:</strong> ${formatCurrency(p.limitRequired)}</p>
-            `;
-
-            // Render Q&A
-            qaList.innerHTML = '';
-            p.qa.forEach(item => {
-                const align = item.from === 'Broker' ? 'items-end' : 'items-start';
-                const bgColor = item.from === 'Broker' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-800';
-                qaList.innerHTML += `
-                    <div class="flex flex-col ${align}">
-                        <div class="font-bold text-sm mb-1">${item.from}</div>
-                        <div class="p-3 rounded-lg ${bgColor} max-w-lg">${item.text}</div>
-                    </div>
-                `;
+            traditionalBtn.addEventListener('click', () => {
+                traditionalBtn.classList.add('active');
+                digitalBtn.classList.remove('active');
+                renderComparisonTable('traditional');
             });
 
-            // Update Syndication Chart
-            const totalQuotedLine = p.quotes.filter(q => q.status.includes('Quoted') || q.status.includes('Bound')).reduce((sum, q) => sum + q.line, 0);
-            const remaining = Math.max(0, 100 - totalQuotedLine);
-            
-            limitRequiredEl.textContent = formatCurrency(p.limitRequired);
-            totalQuotedEl.textContent = formatCurrency(p.limitRequired * (totalQuotedLine / 100));
+            digitalBtn.addEventListener('click', () => {
+                digitalBtn.classList.add('active');
+                traditionalBtn.classList.remove('active');
+                renderComparisonTable('digital');
+            });
 
-            if (syndicationChart) {
-                syndicationChart.destroy();
-            }
-            syndicationChart = new Chart(document.getElementById('syndication-chart').getContext('2d'), {
-                type: 'doughnut',
+            renderComparisonTable('traditional');
+
+            const feasibilityCtx = document.getElementById('feasibilityChart').getContext('2d');
+            new Chart(feasibilityCtx, {
+                type: 'bar',
                 data: {
-                    labels: ['Quoted', 'Remaining'],
+                    labels: ['Technical', 'Operational', 'Regulatory'],
                     datasets: [{
-                        data: [totalQuotedLine, remaining],
-                        backgroundColor: ['#4f46e5', '#e5e7eb'],
-                        borderColor: '#fff',
-                        borderWidth: 4,
+                        label: 'Feasibility Score (out of 10)',
+                        data: [8, 6, 4],
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.7)',
+                            'rgba(107, 114, 128, 0.7)',
+                            'rgba(239, 68, 68, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(79, 70, 229, 1)',
+                             'rgba(107, 114, 128, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 1
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '70%',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10,
+                            grid: { display: false }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + '/10';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
                     }
                 }
             });
-            
-            // Populate quote simulator
-            quoteSimReinsurerSelect.innerHTML = '';
-            const unquotedReinsurers = appData.reinsurers.filter(r => 
-                p.participants.includes(r.id) && !p.quotes.some(q => q.reinsurerId === r.id)
-            );
-            unquotedReinsurers.forEach(r => {
-                quoteSimReinsurerSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`;
+
+            const desirabilityCtx = document.getElementById('desirabilityChart').getContext('2d');
+            new Chart(desirabilityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Efficiency Gains', 'Better Pricing', 'Reduced Risk', 'Improved Access'],
+                    datasets: [{
+                        label: 'Adoption Drivers',
+                        data: [40, 30, 20, 10],
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.8)',
+                            'rgba(5, 150, 105, 0.8)',
+                            'rgba(217, 119, 6, 0.8)',
+                             'rgba(107, 114, 128, 0.8)'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                             labels: {
+                                padding: 20,
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Primary Adoption Drivers',
+                            padding: { top: 10, bottom: 20},
+                            font: { size: 16 }
+                        }
+                    }
+                }
             });
 
-            showView('placementDetail');
-        }
-
-        // --- EVENT LISTENERS ---
-        btnNewPlacement.addEventListener('click', () => showView('newPlacement'));
-        btnCancelNew.addEventListener('click', () => showView('dashboard'));
-        btnBackToDashboard.addEventListener('click', () => showView('dashboard'));
-
-        detailTabs.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab')) {
-                const tabName = e.target.dataset.tab;
-                detailTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-                
-                document.querySelectorAll('#placement-detail-view .tab-content').forEach(c => c.classList.remove('active'));
-                document.getElementById(`tab-content-${tabName}`).classList.add('active');
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
             }
-        });
-        
-        btnSimulateQuote.addEventListener('click', () => {
-            const reinsurerId = parseInt(quoteSimReinsurerSelect.value);
-            const line = parseInt(quoteSimLineInput.value);
+
+            animateValue(document.getElementById('market-size'), 0, 1.6, 1500);
+            animateValue(document.getElementById('reinsurance-premium'), 0, 300, 2000);
             
-            if (!reinsurerId || !line || line <= 0) {
-                alert('Please select a reinsurer and enter a valid line percentage.');
-                return;
-            }
-
-            const placement = appData.placements.find(p => p.id === appData.currentPlacementId);
-            if (placement) {
-                placement.quotes.push({
-                    reinsurerId: reinsurerId,
-                    line: line,
-                    premium: placement.limitRequired * (line / 100) * 0.05, // Mock premium calculation
-                    status: 'Quoted'
+            const processSteps = document.querySelectorAll('.process-step');
+            processSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const modalId = step.dataset.modal;
+                    document.getElementById(modalId).classList.add('visible');
                 });
-                quoteSimLineInput.value = '';
-                renderPlacementDetail(appData.currentPlacementId); // Re-render the view
-            }
-        });
+            });
 
-        // --- INITIALIZATION ---
-        renderDashboard();
-    });
+            document.querySelectorAll('.modal-close-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.modal').classList.remove('visible');
+                });
+            });
+            
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+            });
+
+            // --- POC SCRIPT ---
+
+            // POC Modal Controls
+            const launchPocBtn = document.getElementById('launch-poc-btn');
+            const pocModal = document.getElementById('poc-modal');
+            const pocModalContent = document.getElementById('poc-modal-content');
+            const closePocBtn = document.getElementById('close-poc-btn');
+
+            launchPocBtn.addEventListener('click', () => {
+                pocModal.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
+                pocModalContent.classList.remove('scale-95');
+            });
+
+            const closeThePoc = () => {
+                pocModal.classList.add('opacity-0', 'pointer-events-none', 'scale-105');
+                pocModalContent.classList.add('scale-95');
+            };
+
+            closePocBtn.addEventListener('click', closeThePoc);
+            pocModal.addEventListener('click', (e) => {
+                if (e.target === pocModal) {
+                    closeThePoc();
+                }
+            });
+
+            // POC Application Logic
+            const appData = {
+                reinsurers: [
+                    { id: 1, name: 'Global Re' },
+                    { id: 2, name: 'Capital Solutions' },
+                    { id: 3, name: 'Apex Reinsurance' },
+                    { id: 4, name: 'Synergy Risk Partners' },
+                    { id: 5, name: 'Bermuda Mutual Re' },
+                ],
+                placements: [
+                    {
+                        id: 1,
+                        name: 'Downtown Office Tower',
+                        cedent: 'Regional Mutual Insurance',
+                        limitRequired: 25000000,
+                        retention: 5000000,
+                        tiv: 100000000,
+                        status: 'In Progress',
+                        participants: [1, 2, 3, 4, 5],
+                        quotes: [
+                            { reinsurerId: 1, line: 20, premium: 120000, status: 'Quoted' },
+                            { reinsurerId: 2, line: 25, premium: 125000, status: 'Quoted' },
+                            { reinsurerId: 4, line: 0, premium: 0, status: 'Declined' },
+                        ],
+                        qa: [
+                            { from: 'Broker', text: 'Can you confirm the fire protection class for the location?' },
+                            { from: 'Global Re', text: 'Our engineering team is reviewing. Stand by.' }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: 'Manufacturing Plant Portfolio',
+                        cedent: 'National Property Insurers',
+                        limitRequired: 50000000,
+                        retention: 10000000,
+                        tiv: 350000000,
+                        status: 'In Progress',
+                        participants: [1, 3, 5],
+                        quotes: [],
+                        qa: []
+                    },
+                    {
+                        id: 3,
+                        name: 'Coastal Hotel Chain',
+                        cedent: 'Regional Mutual Insurance',
+                        limitRequired: 15000000,
+                        retention: 2500000,
+                        tiv: 75000000,
+                        status: 'Bound',
+                        participants: [2, 4, 5],
+                        quotes: [
+                             { reinsurerId: 2, line: 50, premium: 250000, status: 'Bound' },
+                             { reinsurerId: 5, line: 50, premium: 260000, status: 'Bound' },
+                        ],
+                        qa: []
+                    }
+                ],
+                currentPlacementId: null,
+            };
+
+            const pocViews = {
+                dashboard: document.getElementById('dashboard-view'),
+                newPlacement: document.getElementById('new-placement-view'),
+                placementDetail: document.getElementById('placement-detail-view'),
+            };
+            const placementsTableBody = document.getElementById('placements-table-body');
+            const btnNewPlacement = document.getElementById('btn-new-placement');
+            const btnCancelNew = document.getElementById('btn-cancel-new');
+            const btnBackToDashboard = document.getElementById('btn-back-to-dashboard');
+            
+            const detailPlacementName = document.getElementById('detail-placement-name');
+            const detailPlacementCedent = document.getElementById('detail-placement-cedent');
+            const quotesBody = document.getElementById('quotes-body');
+            const reinsurersList = document.getElementById('reinsurers-list');
+            const detailTabs = document.getElementById('detail-tabs');
+            const limitRequiredEl = document.getElementById('limit-required');
+            const totalQuotedEl = document.getElementById('total-quoted');
+            const riskDetailsContent = document.getElementById('risk-details-content');
+            const qaList = document.getElementById('qa-list');
+            const quoteSimReinsurerSelect = document.getElementById('quote-sim-reinsurer');
+            const quoteSimLineInput = document.getElementById('quote-sim-line');
+            const btnSimulateQuote = document.getElementById('btn-simulate-quote');
+            
+            let syndicationChart = null;
+
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+            }
+            
+            function showPocView(viewName) {
+                Object.values(pocViews).forEach(view => view.classList.remove('active'));
+                pocViews[viewName].classList.add('active');
+            }
+
+            function renderDashboard() {
+                placementsTableBody.innerHTML = '';
+                appData.placements.forEach(p => {
+                    const totalQuotedLine = p.quotes.filter(q => q.status.includes('Quoted') || q.status.includes('Bound')).reduce((sum, q) => sum + q.line, 0);
+                    const statusColor = p.status === 'Bound' ? 'bg-green-100 text-green-800' : (totalQuotedLine >= 100 ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800');
+                    const finalStatus = p.status === 'Bound' ? 'Bound' : (totalQuotedLine >= 100 ? 'Fully Quoted' : 'In Progress');
+
+                    const row = `
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="p-4 font-medium">${p.name}</td>
+                            <td class="p-4 text-gray-600">${p.cedent}</td>
+                            <td class="p-4 text-gray-600">${formatCurrency(p.limitRequired)}</td>
+                            <td class="p-4"><span class="px-2 py-1 text-xs font-medium rounded-full ${statusColor}">${finalStatus}</span></td>
+                            <td class="p-4 text-right"><button class="btn-view-placement text-indigo-600 hover:underline" data-id="${p.id}">View</button></td>
+                        </tr>
+                    `;
+                    placementsTableBody.innerHTML += row;
+                });
+                document.querySelectorAll('.btn-view-placement').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.dataset.id);
+                        renderPlacementDetail(id);
+                    });
+                });
+            }
+
+            function renderPlacementDetail(placementId) {
+                appData.currentPlacementId = placementId;
+                const p = appData.placements.find(p => p.id === placementId);
+                if (!p) return;
+
+                detailPlacementName.textContent = p.name;
+                detailPlacementCedent.textContent = p.cedent;
+                
+                quotesBody.innerHTML = '';
+                p.quotes.forEach(q => {
+                    const reinsurer = appData.reinsurers.find(r => r.id === q.reinsurerId);
+                    const statusColor = q.status === 'Bound' ? 'text-green-600' : (q.status === 'Quoted' ? 'text-blue-600' : 'text-red-600');
+                    const row = `
+                        <tr class="border-b border-gray-200">
+                            <td class="p-3 font-medium">${reinsurer.name}</td>
+                            <td class="p-3">${q.line > 0 ? q.line + '%' : '-'}</td>
+                            <td class="p-3">${q.premium > 0 ? formatCurrency(q.premium) : '-'}</td>
+                            <td class="p-3 font-semibold ${statusColor}">${q.status}</td>
+                        </tr>
+                    `;
+                    quotesBody.innerHTML += row;
+                });
+                if (p.quotes.length === 0) {
+                    quotesBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">No quotes submitted yet.</td></tr>`;
+                }
+
+                reinsurersList.innerHTML = '';
+                p.participants.forEach(id => {
+                    const reinsurer = appData.reinsurers.find(r => r.id === id);
+                    reinsurersList.innerHTML += `<div class="flex justify-between items-center text-sm p-2 bg-gray-50 rounded-md"><span>${reinsurer.name}</span><span class="text-green-500">✔ Invited</span></div>`;
+                });
+                
+                riskDetailsContent.innerHTML = `
+                    <p><strong>Total Insured Value (TIV):</strong> ${formatCurrency(p.tiv)}</p>
+                    <p><strong>Cedent Retention:</strong> ${formatCurrency(p.retention)}</p>
+                    <p><strong>Limit Required:</strong> ${formatCurrency(p.limitRequired)}</p>
+                `;
+
+                qaList.innerHTML = '';
+                p.qa.forEach(item => {
+                    const align = item.from === 'Broker' ? 'items-end' : 'items-start';
+                    const bgColor = item.from === 'Broker' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-800';
+                    qaList.innerHTML += `
+                        <div class="flex flex-col ${align}">
+                            <div class="font-bold text-sm mb-1">${item.from}</div>
+                            <div class="p-3 rounded-lg ${bgColor} max-w-lg">${item.text}</div>
+                        </div>
+                    `;
+                });
+
+                const totalQuotedLine = p.quotes.filter(q => q.status.includes('Quoted') || q.status.includes('Bound')).reduce((sum, q) => sum + q.line, 0);
+                const remaining = Math.max(0, 100 - totalQuotedLine);
+                
+                limitRequiredEl.textContent = formatCurrency(p.limitRequired);
+                totalQuotedEl.textContent = formatCurrency(p.limitRequired * (totalQuotedLine / 100));
+
+                if (syndicationChart) {
+                    syndicationChart.destroy();
+                }
+                syndicationChart = new Chart(document.getElementById('syndication-chart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Quoted', 'Remaining'],
+                        datasets: [{
+                            data: [totalQuotedLine, remaining],
+                            backgroundColor: ['#4f46e5', '#e5e7eb'],
+                            borderColor: '#f3f4f6',
+                            borderWidth: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                        }
+                    }
+                });
+                
+                quoteSimReinsurerSelect.innerHTML = '';
+                const unquotedReinsurers = appData.reinsurers.filter(r => 
+                    p.participants.includes(r.id) && !p.quotes.some(q => q.reinsurerId === r.id)
+                );
+                unquotedReinsurers.forEach(r => {
+                    quoteSimReinsurerSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`;
+                });
+
+                showPocView('placementDetail');
+            }
+
+            btnNewPlacement.addEventListener('click', () => showPocView('newPlacement'));
+            btnCancelNew.addEventListener('click', () => showPocView('dashboard'));
+            btnBackToDashboard.addEventListener('click', () => showPocView('dashboard'));
+
+            detailTabs.addEventListener('click', (e) => {
+                if (e.target.classList.contains('poc-tab')) {
+                    const tabName = e.target.dataset.tab;
+                    detailTabs.querySelectorAll('.poc-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    document.querySelectorAll('#placement-detail-view .poc-tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-content-${tabName}`).classList.add('active');
+                }
+            });
+            
+            btnSimulateQuote.addEventListener('click', () => {
+                const reinsurerId = parseInt(quoteSimReinsurerSelect.value);
+                const line = parseInt(quoteSimLineInput.value);
+                
+                if (!reinsurerId || !line || line <= 0) {
+                    alert('Please select a reinsurer and enter a valid line percentage.');
+                    return;
+                }
+
+                const placement = appData.placements.find(p => p.id === appData.currentPlacementId);
+                if (placement) {
+                    placement.quotes.push({
+                        reinsurerId: reinsurerId,
+                        line: line,
+                        premium: placement.limitRequired * (line / 100) * 0.05,
+                        status: 'Quoted'
+                    });
+                    quoteSimLineInput.value = '';
+                    renderPlacementDetail(appData.currentPlacementId);
+                }
+            });
+
+            renderDashboard();
+        });
     </script>
 </body>
 </html>
