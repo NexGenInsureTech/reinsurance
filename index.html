@@ -80,246 +80,248 @@
 </head>
 <body class="antialiased">
 
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-gray-800">Reinsurance Reimagined</h1>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#problem" class="nav-link">The Problem</a>
-                        <a href="#solution" class="nav-link">The Solution</a>
-                        <a href="#analysis" class="nav-link">The Opportunity</a>
-                        <a href="#roadmap" class="nav-link">The Path Forward</a>
+    <div id="page-container">
+        <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-gray-800">Reinsurance Reimagined</h1>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#problem" class="nav-link">The Problem</a>
+                            <a href="#solution" class="nav-link">The Solution</a>
+                            <a href="#analysis" class="nav-link">The Opportunity</a>
+                            <a href="#roadmap" class="nav-link">The Path Forward</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    <main>
-        <section id="hero" class="py-20 md:py-32 bg-white">
-            <div class="container mx-auto text-center px-4">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
-                    Digitizing a Trillion-Dollar Industry
-                </h1>
-                <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-600">
-                    The global reinsurance market is the financial bedrock of the insurance world, yet it operates on processes stuck in the past. This is an exploration of the massive opportunity to bring it into the digital age.
-                </p>
-                <div class="mt-10">
-                    <a href="#problem" class="bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
-                        Discover the Opportunity
-                    </a>
+        <main>
+            <section id="hero" class="py-20 md:py-32 bg-white">
+                <div class="container mx-auto text-center px-4">
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+                        Digitizing a Trillion-Dollar Industry
+                    </h1>
+                    <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-600">
+                        The global reinsurance market is the financial bedrock of the insurance world, yet it operates on processes stuck in the past. This is an exploration of the massive opportunity to bring it into the digital age.
+                    </p>
+                    <div class="mt-10">
+                        <a href="#problem" class="bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                            Discover the Opportunity
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="problem" class="py-20">
-            <div class="container mx-auto px-4">
-                <h2 class="section-title">The Friction in the Flow</h2>
-                <p class="section-subtitle">
-                    The traditional reinsurance placement process is a complex, manual, and often chaotic journey. It's a system burdened by inefficiency, creating significant pain points for everyone involved. Click on each step to see the hidden frictions.
-                </p>
+            <section id="problem" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title">The Friction in the Flow</h2>
+                    <p class="section-subtitle">
+                        The traditional reinsurance placement process is a complex, manual, and often chaotic journey. It's a system burdened by inefficiency, creating significant pain points for everyone involved. Click on each step to see the hidden frictions.
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 max-w-6xl mx-auto">
+                        <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-submission">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">📄</div>
+                                <h3 class="font-bold">Submission Prep</h3>
+                                <p class="text-sm text-gray-500">The Starting Point</p>
+                            </div>
+                        </div>
                 
-                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 max-w-6xl mx-auto">
-                    <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-submission">
-                        <div class="text-center p-4 card cursor-pointer">
-                            <div class="text-4xl mb-2">📄</div>
-                            <h3 class="font-bold">Submission Prep</h3>
-                            <p class="text-sm text-gray-500">The Starting Point</p>
-                        </div>
-                    </div>
-            
-                    <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
-            
-                    <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-broker">
-                        <div class="text-center p-4 card cursor-pointer">
-                            <div class="text-4xl mb-2">🤝</div>
-                            <h3 class="font-bold">Broker Marketing</h3>
-                            <p class="text-sm text-gray-500">Finding a Home for Risk</p>
-                        </div>
-                    </div>
-            
-                    <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
-            
-                    <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-underwriting">
-                        <div class="text-center p-4 card cursor-pointer">
-                            <div class="text-4xl mb-2">🔍</div>
-                            <h3 class="font-bold">Underwriting</h3>
-                            <p class="text-sm text-gray-500">Pricing the Risk</p>
-                        </div>
-                    </div>
-            
-                    <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
-            
-                    <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-finalizing">
-                        <div class="text-center p-4 card cursor-pointer">
-                            <div class="text-4xl mb-2">✍️</div>
-                            <h3 class="font-bold">Finalizing</h3>
-                            <p class="text-sm text-gray-500">Closing the Deal</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="players" class="py-20 bg-white">
-            <div class="container mx-auto px-4">
-                <h2 class="section-title">The Key Protagonists</h2>
-                <p class="section-subtitle">Three key players dominate the reinsurance landscape, each with their own unique motivations, goals, and frustrations with the current system.</p>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="card text-center">
-                        <div class="text-5xl mb-4">🏢</div>
-                        <h3 class="text-2xl font-bold mb-2">The Ceding Insurer</h3>
-                        <p class="text-gray-600 mb-4">The buyer of protection. Seeks to manage capital, stabilize earnings, and protect against catastrophes.</p>
-                        <div class="text-left space-y-2">
-                           <p><span class="font-semibold text-green-600">Wants:</span> Best price, broad coverage, fast placement.</p>
-                           <p><span class="font-semibold text-red-600">Pains:</span> Opaque pricing, slow process, limited market access.</p>
-                        </div>
-                    </div>
-                    <div class="card text-center">
-                        <div class="text-5xl mb-4">📈</div>
-                        <h3 class="text-2xl font-bold mb-2">The Reinsurer</h3>
-                        <p class="text-gray-600 mb-4">The seller of protection. Aims for underwriting profit by building a diversified portfolio of risks.</p>
-                        <div class="text-left space-y-2">
-                           <p><span class="font-semibold text-green-600">Wants:</span> High-quality data, adequate premium, disciplined partners.</p>
-                           <p><span class="font-semibold text-red-600">Pains:</span> Poor data, flawed analytics, outdated portfolio views.</p>
-                        </div>
-                    </div>
-                    <div class="card text-center">
-                        <div class="text-5xl mb-4">💼</div>
-                        <h3 class="text-2xl font-bold mb-2">The Broker</h3>
-                        <p class="text-gray-600 mb-4">The critical intermediary. Advises the cedent and navigates the market to place the risk.</p>
-                        <div class="text-left space-y-2">
-                           <p><span class="font-semibold text-green-600">Wants:</span> Client satisfaction, efficient placement, market influence.</p>
-                           <p><span class="font-semibold text-red-600">Pains:</span> Manual admin work, communication chaos, process bottlenecks.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="solution" class="py-20">
-            <div class="container mx-auto px-4">
-                <h2 class="section-title">The Marketplace Solution</h2>
-                <p class="section-subtitle">
-                    A digital marketplace can replace the manual, opaque process with a transparent, data-driven, and streamlined experience. It addresses the core pain points of every participant by re-engineering the placement process.
-                </p>
-                 <div class="flex justify-center mb-8">
-                    <button id="btn-traditional" class="tab-button active">Traditional Process</button>
-                    <button id="btn-digital" class="tab-button">Digital Marketplace</button>
-                </div>
-
-                <div class="max-w-4xl mx-auto">
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="p-4 font-semibold text-gray-700">Stage</th>
-                                    <th class="p-4 font-semibold text-gray-700">Experience</th>
-                                </tr>
-                            </thead>
-                            <tbody id="process-comparison-body">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="analysis" class="py-20 bg-white">
-            <div class="container mx-auto px-4">
-                <h2 class="section-title">Analyzing the Opportunity</h2>
-                <p class="section-subtitle">A great idea must be feasible, viable, and desirable. The data suggests a compelling case for a reinsurance marketplace, despite the challenges.</p>
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Feasibility: Can It Be Built?</h3>
-                        <p class="text-gray-600 mb-6">Building the platform is technically complex but achievable with modern technology. The greatest hurdles are not in code, but in navigating operational and regulatory complexities.</p>
-                        <div class="chart-container h-64 max-h-72">
-                            <canvas id="feasibilityChart"></canvas>
-                        </div>
-                    </div>
-                     <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Viability: Can It Be Profitable?</h3>
-                        <p class="text-gray-600 mb-6">The market is massive. Capturing even a tiny fraction of the value flowing through the system represents a multi-billion dollar opportunity.</p>
-                        <div class="grid grid-cols-2 gap-4 text-center">
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div id="market-size" class="text-4xl font-bold text-indigo-600">0</div>
-                                <div class="text-gray-500">Trillion USD P&C Market</div>
+                        <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
+                
+                        <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-broker">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">🤝</div>
+                                <h3 class="font-bold">Broker Marketing</h3>
+                                <p class="text-sm text-gray-500">Finding a Home for Risk</p>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div id="reinsurance-premium" class="text-4xl font-bold text-indigo-600">0</div>
-                                <div class="text-gray-500">Billion+ in Global Reinsurance Premium</div>
+                        </div>
+                
+                        <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
+                
+                        <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-underwriting">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">🔍</div>
+                                <h3 class="font-bold">Underwriting</h3>
+                                <p class="text-sm text-gray-500">Pricing the Risk</p>
+                            </div>
+                        </div>
+                
+                        <div class="flex-shrink-0 text-3xl text-gray-300 font-light transform rotate-90 md:rotate-0 mx-auto">↓</div>
+                
+                        <div class="w-full md:w-auto flex-1 process-step" data-modal="modal-finalizing">
+                            <div class="text-center p-4 card cursor-pointer">
+                                <div class="text-4xl mb-2">✍️</div>
+                                <h3 class="font-bold">Finalizing</h3>
+                                <p class="text-sm text-gray-500">Closing the Deal</p>
                             </div>
                         </div>
                     </div>
-                    <div class="lg:col-span-2">
-                         <div class="grid lg:grid-cols-2 gap-12 items-center mt-12">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Desirability: Will They Use It?</h3>
-                                <p class="text-gray-600 mb-6">The desire for change is driven by acute pain points. The platform is desirable because it offers clear, quantifiable benefits to every participant by solving their most pressing problems.</p>
-                                <div class="space-y-2">
-                                    <p>✅ <span class="font-semibold">For Reinsurers:</span> Better data for better decisions.</p>
-                                    <p>✅ <span class="font-semibold">For Cedents:</span> Better pricing and market access.</p>
-                                    <p>✅ <span class="font-semibold">For Brokers:</span> Less admin, more strategic advising.</p>
+                </div>
+            </section>
+
+            <section id="players" class="py-20 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title">The Key Protagonists</h2>
+                    <p class="section-subtitle">Three key players dominate the reinsurance landscape, each with their own unique motivations, goals, and frustrations with the current system.</p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="card text-center">
+                            <div class="text-5xl mb-4">🏢</div>
+                            <h3 class="text-2xl font-bold mb-2">The Ceding Insurer</h3>
+                            <p class="text-gray-600 mb-4">The buyer of protection. Seeks to manage capital, stabilize earnings, and protect against catastrophes.</p>
+                            <div class="text-left space-y-2">
+                               <p><span class="font-semibold text-green-600">Wants:</span> Best price, broad coverage, fast placement.</p>
+                               <p><span class="font-semibold text-red-600">Pains:</span> Opaque pricing, slow process, limited market access.</p>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-5xl mb-4">📈</div>
+                            <h3 class="text-2xl font-bold mb-2">The Reinsurer</h3>
+                            <p class="text-gray-600 mb-4">The seller of protection. Aims for underwriting profit by building a diversified portfolio of risks.</p>
+                            <div class="text-left space-y-2">
+                               <p><span class="font-semibold text-green-600">Wants:</span> High-quality data, adequate premium, disciplined partners.</p>
+                               <p><span class="font-semibold text-red-600">Pains:</span> Poor data, flawed analytics, outdated portfolio views.</p>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-5xl mb-4">💼</div>
+                            <h3 class="text-2xl font-bold mb-2">The Broker</h3>
+                            <p class="text-gray-600 mb-4">The critical intermediary. Advises the cedent and navigates the market to place the risk.</p>
+                            <div class="text-left space-y-2">
+                               <p><span class="font-semibold text-green-600">Wants:</span> Client satisfaction, efficient placement, market influence.</p>
+                               <p><span class="font-semibold text-red-600">Pains:</span> Manual admin work, communication chaos, process bottlenecks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="solution" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title">The Marketplace Solution</h2>
+                    <p class="section-subtitle">
+                        A digital marketplace can replace the manual, opaque process with a transparent, data-driven, and streamlined experience. It addresses the core pain points of every participant by re-engineering the placement process.
+                    </p>
+                     <div class="flex justify-center mb-8">
+                        <button id="btn-traditional" class="tab-button active">Traditional Process</button>
+                        <button id="btn-digital" class="tab-button">Digital Marketplace</button>
+                    </div>
+
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="p-4 font-semibold text-gray-700">Stage</th>
+                                        <th class="p-4 font-semibold text-gray-700">Experience</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="process-comparison-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analysis" class="py-20 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title">Analyzing the Opportunity</h2>
+                    <p class="section-subtitle">A great idea must be feasible, viable, and desirable. The data suggests a compelling case for a reinsurance marketplace, despite the challenges.</p>
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Feasibility: Can It Be Built?</h3>
+                            <p class="text-gray-600 mb-6">Building the platform is technically complex but achievable with modern technology. The greatest hurdles are not in code, but in navigating operational and regulatory complexities.</p>
+                            <div class="chart-container h-64 max-h-72">
+                                <canvas id="feasibilityChart"></canvas>
+                            </div>
+                        </div>
+                         <div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Viability: Can It Be Profitable?</h3>
+                            <p class="text-gray-600 mb-6">The market is massive. Capturing even a tiny fraction of the value flowing through the system represents a multi-billion dollar opportunity.</p>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div id="market-size" class="text-4xl font-bold text-indigo-600">0</div>
+                                    <div class="text-gray-500">Trillion USD P&C Market</div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div id="reinsurance-premium" class="text-4xl font-bold text-indigo-600">0</div>
+                                    <div class="text-gray-500">Billion+ in Global Reinsurance Premium</div>
                                 </div>
                             </div>
-                            <div class="chart-container h-80 max-h-96">
-                                <canvas id="desirabilityChart"></canvas>
-                            </div>
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="roadmap" class="py-20">
-            <div class="container mx-auto px-4">
-                <h2 class="section-title">The Path Forward</h2>
-                <p class="section-subtitle">Success requires a deliberate, phased approach to manage complexity, build trust, and gain market momentum. A "big bang" launch is doomed to fail.</p>
-                <div class="relative">
-                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 -translate-y-1/2"></div>
-                    <div class="grid md:grid-cols-3 gap-8 relative">
-                        <div class="card text-center flex flex-col">
-                            <div class="flex-grow">
-                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-                                <h3 class="text-xl font-bold mb-2">Phase 1: The Wedge</h3>
-                                <p class="text-gray-600">Launch a POC/MVP focused on the more transactional <span class="font-semibold">facultative market</span> in a single geography. Target brokers as the primary users to prove value and build initial liquidity.</p>
-                            </div>
-                            <div class="mt-4">
-                                <button id="launch-poc-btn" class="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
-                                    Launch Interactive POC
-                                </button>
-                            </div>
                         </div>
-                        <div class="card text-center flex flex-col">
-                            <div class="flex-grow">
-                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-                                <h3 class="text-xl font-bold mb-2">Phase 2: Expansion</h3>
-                                <p class="text-gray-600">Expand into adjacent business lines and geographies. Add more sophisticated analytics and begin marketing directly to ceding companies. Leverage the network effect to accelerate growth.</p>
-                            </div>
-                        </div>
-                        <div class="card text-center flex flex-col">
-                            <div class="flex-grow">
-                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-                                <h3 class="text-xl font-bold mb-2">Phase 3: The Holy Grail</h3>
-                                 <p class="text-gray-600">With a mature platform and a trusted brand, begin tackling the highly complex and relationship-driven <span class="font-semibold">treaty market</span>. Evolve into the core infrastructure for the entire industry.</p>
-                            </div>
+                        <div class="lg:col-span-2">
+                             <div class="grid lg:grid-cols-2 gap-12 items-center mt-12">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Desirability: Will They Use It?</h3>
+                                    <p class="text-gray-600 mb-6">The desire for change is driven by acute pain points. The platform is desirable because it offers clear, quantifiable benefits to every participant by solving their most pressing problems.</p>
+                                    <div class="space-y-2">
+                                        <p>✅ <span class="font-semibold">For Reinsurers:</span> Better data for better decisions.</p>
+                                        <p>✅ <span class="font-semibold">For Cedents:</span> Better pricing and market access.</p>
+                                        <p>✅ <span class="font-semibold">For Brokers:</span> Less admin, more strategic advising.</p>
+                                    </div>
+                                </div>
+                                <div class="chart-container h-80 max-h-96">
+                                    <canvas id="desirabilityChart"></canvas>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
 
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-4 py-8 text-center">
-            <p>&copy; 2025 Reinsurance Reimagined. An interactive analysis.</p>
-            <p class="text-sm text-gray-400 mt-2">This is a conceptual application based on the provided source report.</p>
-        </div>
-    </footer>
-    
+            <section id="roadmap" class="py-20">
+                <div class="container mx-auto px-4">
+                    <h2 class="section-title">The Path Forward</h2>
+                    <p class="section-subtitle">Success requires a deliberate, phased approach to manage complexity, build trust, and gain market momentum. A "big bang" launch is doomed to fail.</p>
+                    <div class="relative">
+                        <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 -translate-y-1/2"></div>
+                        <div class="grid md:grid-cols-3 gap-8 relative">
+                            <div class="card text-center flex flex-col">
+                                <div class="flex-grow">
+                                    <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                                    <h3 class="text-xl font-bold mb-2">Phase 1: The Wedge</h3>
+                                    <p class="text-gray-600">Launch a POC/MVP focused on the more transactional <span class="font-semibold">facultative market</span> in a single geography. Target brokers as the primary users to prove value and build initial liquidity.</p>
+                                </div>
+                                <div class="mt-4">
+                                    <button id="launch-poc-btn" class="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                                        Launch Interactive POC
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card text-center flex flex-col">
+                                <div class="flex-grow">
+                                    <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                                    <h3 class="text-xl font-bold mb-2">Phase 2: Expansion</h3>
+                                    <p class="text-gray-600">Expand into adjacent business lines and geographies. Add more sophisticated analytics and begin marketing directly to ceding companies. Leverage the network effect to accelerate growth.</p>
+                                </div>
+                            </div>
+                            <div class="card text-center flex flex-col">
+                                <div class="flex-grow">
+                                    <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                                    <h3 class="text-xl font-bold mb-2">Phase 3: The Holy Grail</h3>
+                                     <p class="text-gray-600">With a mature platform and a trusted brand, begin tackling the highly complex and relationship-driven <span class="font-semibold">treaty market</span>. Evolve into the core infrastructure for the entire industry.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-gray-800 text-white">
+            <div class="container mx-auto px-4 py-8 text-center">
+                <p>&copy; 2025 Reinsurance Reimagined. An interactive analysis.</p>
+                <p class="text-sm text-gray-400 mt-2">This is a conceptual application based on the provided source report.</p>
+            </div>
+        </footer>
+    </div>
+
     <!-- Modals for Process Steps -->
     <div id="modal-submission" class="modal">
         <div class="modal-content">
