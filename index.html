@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Zen -->
     <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative journey. It starts with a high-level introduction (The "What"), moves to visualizing the core problem (The "Why it's broken"), introduces the actors (The "Who"), presents the proposed platform (The "How to fix it"), analyzes its potential (The "Will it work?"), and concludes with a strategic roadmap (The "Path Forward"). This thematic, storytelling structure was chosen over a direct report-to-page mapping to make the complex information more engaging and intuitive for a user who might be an investor, innovator, or industry professional, guiding them logically from problem to solution to evaluation. A functional POC for Phase 1 is now embedded within a modal, accessible from the roadmap, to provide a tangible, interactive demonstration of the proposed solution. -->
-    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to make the dense report digestible. An interactive HTML/CSS process flow diagram visualizes the "Problem" section, making friction tangible. "The Players" are presented in a clear, comparative card layout. The "Solution" uses interactive cards and a dynamic "Before/After" table (powered by JS) to highlight the value proposition. The "Analysis" section transforms text into a dashboard with Chart.js visualizations (bar, donut) and animated counters to make feasibility, viability, and desirability data easy to grasp. The roadmap is a clean, visual timeline, now with an interactive button to launch the POC. The POC itself uses a task-based UI with a dashboard, forms, and a detail view with its own syndication tracker chart (Chart.js), all running on a mock JS data store. -->
+    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to make the dense report digestible. An interactive HTML/CSS process flow diagram visualizes the "Problem" section, making friction tangible. "The Players" are presented in a clear, comparative card layout. The "Solution" uses interactive cards and a dynamic "Before/After" table (powered by JS) to highlight the value proposition. The "Analysis" section transforms text into a dashboard with Chart.js visualizations (bar, donut) and animated counters to make feasibility, viability, and desirability data easy to grasp. The roadmap is a clean, visual timeline, now with an interactive button to launch the POC. The POC itself uses a task-based UI with a dashboard, forms, and a detail view with its own syndication tracker chart (Chart.js), all running on a mock JS data store that resets on each launch. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -73,6 +73,9 @@
         .poc-tab.active { @apply text-indigo-600 border-indigo-500; }
         .poc-tab-content { display: none; }
         .poc-tab-content.active { display: block; }
+        .poc-error-msg {
+            @apply text-red-600 text-sm mt-2 opacity-0 transition-opacity duration-300;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -274,25 +277,31 @@
                 <div class="relative">
                     <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 -translate-y-1/2"></div>
                     <div class="grid md:grid-cols-3 gap-8 relative">
-                        <div class="card text-center">
-                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
-                            <h3 class="text-xl font-bold mb-2">Phase 1: The Wedge</h3>
-                            <p class="text-gray-600">Launch a POC/MVP focused on the more transactional <span class="font-semibold">facultative market</span> in a single geography. Target brokers as the primary users to prove value and build initial liquidity.</p>
+                        <div class="card text-center flex flex-col">
+                            <div class="flex-grow">
+                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                                <h3 class="text-xl font-bold mb-2">Phase 1: The Wedge</h3>
+                                <p class="text-gray-600">Launch a POC/MVP focused on the more transactional <span class="font-semibold">facultative market</span> in a single geography. Target brokers as the primary users to prove value and build initial liquidity.</p>
+                            </div>
                             <div class="mt-4">
                                 <button id="launch-poc-btn" class="bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:scale-105">
                                     Launch Interactive POC
                                 </button>
                             </div>
                         </div>
-                        <div class="card text-center">
-                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
-                            <h3 class="text-xl font-bold mb-2">Phase 2: Expansion</h3>
-                            <p class="text-gray-600">Expand into adjacent business lines and geographies. Add more sophisticated analytics and begin marketing directly to ceding companies. Leverage the network effect to accelerate growth.</p>
+                        <div class="card text-center flex flex-col">
+                            <div class="flex-grow">
+                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                                <h3 class="text-xl font-bold mb-2">Phase 2: Expansion</h3>
+                                <p class="text-gray-600">Expand into adjacent business lines and geographies. Add more sophisticated analytics and begin marketing directly to ceding companies. Leverage the network effect to accelerate growth.</p>
+                            </div>
                         </div>
-                        <div class="card text-center">
-                            <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
-                            <h3 class="text-xl font-bold mb-2">Phase 3: The Holy Grail</h3>
-                             <p class="text-gray-600">With a mature platform and trusted brand, begin tackling the highly complex and relationship-driven <span class="font-semibold">treaty market</span>. Evolve into the core infrastructure for the entire industry.</p>
+                        <div class="card text-center flex flex-col">
+                            <div class="flex-grow">
+                                <div class="bg-indigo-100 text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                                <h3 class="text-xl font-bold mb-2">Phase 3: The Holy Grail</h3>
+                                 <p class="text-gray-600">With a mature platform and trusted brand, begin tackling the highly complex and relationship-driven <span class="font-semibold">treaty market</span>. Evolve into the core infrastructure for the entire industry.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -358,7 +367,7 @@
     </div>
 
     <!-- POC Modal -->
-    <div id="poc-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 lg:p-8 z-50 transition-all duration-300 opacity-0 pointer-events-none scale-105">
+    <div id="poc-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 lg:p-8 z-60 transition-all duration-300 opacity-0 pointer-events-none scale-105">
         <div id="poc-modal-content" class="bg-gray-100 rounded-xl shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col transform transition-all duration-300 scale-95">
             <div class="flex-shrink-0 p-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-xl">
                  <div class="flex items-center space-x-4">
@@ -509,6 +518,7 @@
                                         <select id="quote-sim-reinsurer" class="input-field mb-2"></select>
                                         <input id="quote-sim-line" type="number" class="input-field mb-2" placeholder="Line Offered (%)">
                                         <button id="btn-simulate-quote" class="btn btn-secondary w-full">Submit Quote</button>
+                                        <p id="quote-sim-error" class="poc-error-msg">Please select a reinsurer and enter a valid line.</p>
                                     </div>
                                 </div>
                             </div>
@@ -585,12 +595,8 @@
                             'rgba(107, 114, 128, 0.7)',
                             'rgba(239, 68, 68, 0.7)'
                         ],
-                        borderColor: [
-                            'rgba(79, 70, 229, 1)',
-                             'rgba(107, 114, 128, 1)',
-                            'rgba(239, 68, 68, 1)'
-                        ],
-                        borderWidth: 1
+                        borderColor: '#F8F9FA',
+                        borderWidth: 2
                     }]
                 },
                 options: {
@@ -598,28 +604,15 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: 10,
-                            grid: { display: false }
-                        },
-                        y: {
-                            grid: { display: false }
-                        }
+                        x: { beginAtZero: true, max: 10, grid: { display: false } },
+                        y: { grid: { display: false } }
                     },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.x !== null) {
-                                        label += context.parsed.x + '/10';
-                                    }
-                                    return label;
+                                    return `${context.label}: ${context.parsed.x}/10`;
                                 }
                             }
                         }
@@ -642,7 +635,7 @@
                              'rgba(107, 114, 128, 0.8)'
                         ],
                         borderColor: '#fff',
-                        borderWidth: 2,
+                        borderWidth: 4,
                         hoverOffset: 4
                     }]
                 },
@@ -650,18 +643,8 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                             labels: {
-                                padding: 20,
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Primary Adoption Drivers',
-                            padding: { top: 10, bottom: 20},
-                            font: { size: 16 }
-                        }
+                        legend: { position: 'bottom', labels: { padding: 20 } },
+                        title: { display: true, text: 'Primary Adoption Drivers', padding: { top: 10, bottom: 20}, font: { size: 16 } }
                     }
                 }
             });
@@ -706,48 +689,18 @@
 
             // --- POC SCRIPT ---
 
-            // POC Modal Controls
-            const launchPocBtn = document.getElementById('launch-poc-btn');
             const pocModal = document.getElementById('poc-modal');
             const pocModalContent = document.getElementById('poc-modal-content');
-            const closePocBtn = document.getElementById('close-poc-btn');
-
-            launchPocBtn.addEventListener('click', () => {
-                pocModal.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
-                pocModalContent.classList.remove('scale-95');
-            });
-
-            const closeThePoc = () => {
-                pocModal.classList.add('opacity-0', 'pointer-events-none', 'scale-105');
-                pocModalContent.classList.add('scale-95');
-            };
-
-            closePocBtn.addEventListener('click', closeThePoc);
-            pocModal.addEventListener('click', (e) => {
-                if (e.target === pocModal) {
-                    closeThePoc();
-                }
-            });
-
-            // POC Application Logic
-            const appData = {
+            
+            const initialAppData = {
                 reinsurers: [
-                    { id: 1, name: 'Global Re' },
-                    { id: 2, name: 'Capital Solutions' },
-                    { id: 3, name: 'Apex Reinsurance' },
-                    { id: 4, name: 'Synergy Risk Partners' },
-                    { id: 5, name: 'Bermuda Mutual Re' },
+                    { id: 1, name: 'Global Re' }, { id: 2, name: 'Capital Solutions' }, { id: 3, name: 'Apex Reinsurance' },
+                    { id: 4, name: 'Synergy Risk Partners' }, { id: 5, name: 'Bermuda Mutual Re' },
                 ],
                 placements: [
                     {
-                        id: 1,
-                        name: 'Downtown Office Tower',
-                        cedent: 'Regional Mutual Insurance',
-                        limitRequired: 25000000,
-                        retention: 5000000,
-                        tiv: 100000000,
-                        status: 'In Progress',
-                        participants: [1, 2, 3, 4, 5],
+                        id: 1, name: 'Downtown Office Tower', cedent: 'Regional Mutual Insurance', limitRequired: 25000000,
+                        retention: 5000000, tiv: 100000000, status: 'In Progress', participants: [1, 2, 3, 4, 5],
                         quotes: [
                             { reinsurerId: 1, line: 20, premium: 120000, status: 'Quoted' },
                             { reinsurerId: 2, line: 25, premium: 125000, status: 'Quoted' },
@@ -759,26 +712,12 @@
                         ]
                     },
                     {
-                        id: 2,
-                        name: 'Manufacturing Plant Portfolio',
-                        cedent: 'National Property Insurers',
-                        limitRequired: 50000000,
-                        retention: 10000000,
-                        tiv: 350000000,
-                        status: 'In Progress',
-                        participants: [1, 3, 5],
-                        quotes: [],
-                        qa: []
+                        id: 2, name: 'Manufacturing Plant Portfolio', cedent: 'National Property Insurers', limitRequired: 50000000,
+                        retention: 10000000, tiv: 350000000, status: 'In Progress', participants: [1, 3, 5], quotes: [], qa: []
                     },
                     {
-                        id: 3,
-                        name: 'Coastal Hotel Chain',
-                        cedent: 'Regional Mutual Insurance',
-                        limitRequired: 15000000,
-                        retention: 2500000,
-                        tiv: 75000000,
-                        status: 'Bound',
-                        participants: [2, 4, 5],
+                        id: 3, name: 'Coastal Hotel Chain', cedent: 'Regional Mutual Insurance', limitRequired: 15000000,
+                        retention: 2500000, tiv: 75000000, status: 'Bound', participants: [2, 4, 5],
                         quotes: [
                              { reinsurerId: 2, line: 50, premium: 250000, status: 'Bound' },
                              { reinsurerId: 5, line: 50, premium: 260000, status: 'Bound' },
@@ -789,16 +728,14 @@
                 currentPlacementId: null,
             };
 
+            let appData = {};
+
             const pocViews = {
                 dashboard: document.getElementById('dashboard-view'),
                 newPlacement: document.getElementById('new-placement-view'),
                 placementDetail: document.getElementById('placement-detail-view'),
             };
             const placementsTableBody = document.getElementById('placements-table-body');
-            const btnNewPlacement = document.getElementById('btn-new-placement');
-            const btnCancelNew = document.getElementById('btn-cancel-new');
-            const btnBackToDashboard = document.getElementById('btn-back-to-dashboard');
-            
             const detailPlacementName = document.getElementById('detail-placement-name');
             const detailPlacementCedent = document.getElementById('detail-placement-cedent');
             const quotesBody = document.getElementById('quotes-body');
@@ -810,9 +747,13 @@
             const qaList = document.getElementById('qa-list');
             const quoteSimReinsurerSelect = document.getElementById('quote-sim-reinsurer');
             const quoteSimLineInput = document.getElementById('quote-sim-line');
-            const btnSimulateQuote = document.getElementById('btn-simulate-quote');
+            const quoteSimError = document.getElementById('quote-sim-error');
             
             let syndicationChart = null;
+
+            function deepClone(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            }
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
@@ -841,12 +782,6 @@
                     `;
                     placementsTableBody.innerHTML += row;
                 });
-                document.querySelectorAll('.btn-view-placement').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const id = parseInt(e.target.dataset.id);
-                        renderPlacementDetail(id);
-                    });
-                });
             }
 
             function renderPlacementDetail(placementId) {
@@ -861,15 +796,13 @@
                 p.quotes.forEach(q => {
                     const reinsurer = appData.reinsurers.find(r => r.id === q.reinsurerId);
                     const statusColor = q.status === 'Bound' ? 'text-green-600' : (q.status === 'Quoted' ? 'text-blue-600' : 'text-red-600');
-                    const row = `
+                    quotesBody.innerHTML += `
                         <tr class="border-b border-gray-200">
                             <td class="p-3 font-medium">${reinsurer.name}</td>
                             <td class="p-3">${q.line > 0 ? q.line + '%' : '-'}</td>
                             <td class="p-3">${q.premium > 0 ? formatCurrency(q.premium) : '-'}</td>
                             <td class="p-3 font-semibold ${statusColor}">${q.status}</td>
-                        </tr>
-                    `;
-                    quotesBody.innerHTML += row;
+                        </tr>`;
                 });
                 if (p.quotes.length === 0) {
                     quotesBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">No quotes submitted yet.</td></tr>`;
@@ -884,8 +817,7 @@
                 riskDetailsContent.innerHTML = `
                     <p><strong>Total Insured Value (TIV):</strong> ${formatCurrency(p.tiv)}</p>
                     <p><strong>Cedent Retention:</strong> ${formatCurrency(p.retention)}</p>
-                    <p><strong>Limit Required:</strong> ${formatCurrency(p.limitRequired)}</p>
-                `;
+                    <p><strong>Limit Required:</strong> ${formatCurrency(p.limitRequired)}</p>`;
 
                 qaList.innerHTML = '';
                 p.qa.forEach(item => {
@@ -895,8 +827,7 @@
                         <div class="flex flex-col ${align}">
                             <div class="font-bold text-sm mb-1">${item.from}</div>
                             <div class="p-3 rounded-lg ${bgColor} max-w-lg">${item.text}</div>
-                        </div>
-                    `;
+                        </div>`;
                 });
 
                 const totalQuotedLine = p.quotes.filter(q => q.status.includes('Quoted') || q.status.includes('Bound')).reduce((sum, q) => sum + q.line, 0);
@@ -905,9 +836,7 @@
                 limitRequiredEl.textContent = formatCurrency(p.limitRequired);
                 totalQuotedEl.textContent = formatCurrency(p.limitRequired * (totalQuotedLine / 100));
 
-                if (syndicationChart) {
-                    syndicationChart.destroy();
-                }
+                if (syndicationChart) syndicationChart.destroy();
                 syndicationChart = new Chart(document.getElementById('syndication-chart').getContext('2d'), {
                     type: 'doughnut',
                     data: {
@@ -915,18 +844,13 @@
                         datasets: [{
                             data: [totalQuotedLine, remaining],
                             backgroundColor: ['#4f46e5', '#e5e7eb'],
-                            borderColor: '#f3f4f6',
+                            borderColor: '#fff',
                             borderWidth: 4,
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '70%',
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: false },
-                        }
+                        responsive: true, maintainAspectRatio: false, cutout: '70%',
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } }
                     }
                 });
                 
@@ -937,13 +861,40 @@
                 unquotedReinsurers.forEach(r => {
                     quoteSimReinsurerSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`;
                 });
+                quoteSimLineInput.value = '';
+                quoteSimError.style.opacity = 0;
 
                 showPocView('placementDetail');
             }
+            
+            function resetAndLaunchPoc() {
+                appData = deepClone(initialAppData);
+                renderDashboard();
+                showPocView('dashboard');
+                pocModal.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
+                pocModalContent.classList.remove('scale-95');
+            }
 
-            btnNewPlacement.addEventListener('click', () => showPocView('newPlacement'));
-            btnCancelNew.addEventListener('click', () => showPocView('dashboard'));
-            btnBackToDashboard.addEventListener('click', () => showPocView('dashboard'));
+            document.getElementById('launch-poc-btn').addEventListener('click', resetAndLaunchPoc);
+            
+            const closeThePoc = () => {
+                pocModal.classList.add('opacity-0', 'pointer-events-none', 'scale-105');
+                pocModalContent.classList.add('scale-95');
+            };
+
+            document.getElementById('close-poc-btn').addEventListener('click', closeThePoc);
+            pocModal.addEventListener('click', (e) => { if (e.target === pocModal) closeThePoc(); });
+
+            document.getElementById('btn-new-placement').addEventListener('click', () => showPocView('newPlacement'));
+            document.getElementById('btn-cancel-new').addEventListener('click', () => showPocView('dashboard'));
+            document.getElementById('btn-back-to-dashboard').addEventListener('click', () => showPocView('dashboard'));
+
+            placementsTableBody.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('btn-view-placement')) {
+                    const id = parseInt(e.target.dataset.id);
+                    renderPlacementDetail(id);
+                }
+            });
 
             detailTabs.addEventListener('click', (e) => {
                 if (e.target.classList.contains('poc-tab')) {
@@ -956,12 +907,13 @@
                 }
             });
             
-            btnSimulateQuote.addEventListener('click', () => {
+            document.getElementById('btn-simulate-quote').addEventListener('click', () => {
                 const reinsurerId = parseInt(quoteSimReinsurerSelect.value);
                 const line = parseInt(quoteSimLineInput.value);
                 
                 if (!reinsurerId || !line || line <= 0) {
-                    alert('Please select a reinsurer and enter a valid line percentage.');
+                    quoteSimError.style.opacity = 1;
+                    setTimeout(() => { quoteSimError.style.opacity = 0; }, 3000);
                     return;
                 }
 
@@ -973,12 +925,9 @@
                         premium: placement.limitRequired * (line / 100) * 0.05,
                         status: 'Quoted'
                     });
-                    quoteSimLineInput.value = '';
                     renderPlacementDetail(appData.currentPlacementId);
                 }
             });
-
-            renderDashboard();
         });
     </script>
 </body>
